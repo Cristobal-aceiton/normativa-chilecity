@@ -1,0 +1,1836 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Normativa — ChileCity RP</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --neon: #e02020;
+      --neon2: #ff4444;
+      --glow: rgba(220,30,30,0.45);
+      --glow-soft: rgba(220,30,30,0.18);
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --gold: #F59E0B;
+      --green: #10B981;
+      --purple: #8B5CF6;
+      --blue: #3B82F6;
+      --orange: #F97316;
+      --bg: #060608;
+      --glass: rgba(255,255,255,0.04);
+      --glass-border: rgba(255,255,255,0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: #fff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── ANIMATED BG ── */
+    .bg-grid {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(220,30,30,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(220,30,30,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      animation: gridPan 40s linear infinite;
+    }
+    @keyframes gridPan {
+      from { background-position: 0 0; }
+      to   { background-position: 48px 48px; }
+    }
+
+    .bg-radial {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 50% at 10% 20%, rgba(220,30,30,0.10) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 90% 80%, rgba(220,30,30,0.06) 0%, transparent 70%);
+    }
+
+    /* ── PARTICLES ── */
+    .particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .particle {
+      position: absolute;
+      width: 2px; height: 2px;
+      border-radius: 50%;
+      background: var(--neon2);
+      opacity: 0;
+      animation: floatUp var(--dur, 8s) var(--delay, 0s) linear infinite;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.3; }
+      100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+    }
+
+    /* ── NAV ── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px;
+      height: 68px;
+      background: rgba(6,6,8,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(220,30,30,0.15);
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif; font-size: 28px;
+      background: linear-gradient(135deg, #fff 30%, var(--neon2) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; letter-spacing: 2px;
+    }
+    .nav-badge {
+      font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--neon2);
+      background: rgba(220,30,30,0.15);
+      border: 1px solid rgba(220,30,30,0.3);
+      border-radius: 6px; padding: 3px 10px;
+    }
+    .nav-tabs {
+      display: flex; gap: 4px;
+    }
+    .nav-tab {
+      font-size: 12px; font-weight: 600; letter-spacing: 0.5px;
+      color: rgba(255,255,255,0.45);
+      background: none; border: none; cursor: pointer;
+      padding: 6px 14px; border-radius: 8px;
+      transition: all 0.2s var(--ease);
+      text-decoration: none;
+    }
+    .nav-tab:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.06); }
+    .nav-tab.active { color: var(--neon2); background: rgba(220,30,30,0.12); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; z-index: 1;
+      padding: 140px 32px 80px;
+      text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: 20px;
+    }
+    .hero-eyebrow {
+      font-size: 11px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--neon2);
+      background: rgba(220,30,30,0.12);
+      border: 1px solid rgba(220,30,30,0.3);
+      border-radius: 999px; padding: 6px 20px;
+      animation: fadeUp 0.8s var(--ease) both;
+    }
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(58px, 9vw, 120px);
+      line-height: 0.88;
+      background: linear-gradient(135deg, #fff 40%, var(--neon2) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 60px rgba(220,30,30,0.35));
+      animation: fadeUp 0.8s 0.1s var(--ease) both;
+    }
+    .hero-sub {
+      max-width: 500px; font-size: 15px; line-height: 1.7;
+      color: rgba(255,255,255,0.5); font-weight: 300;
+      animation: fadeUp 0.8s 0.2s var(--ease) both;
+    }
+    .hero-line {
+      width: 80px; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--neon), transparent);
+      animation: fadeUp 0.8s 0.25s var(--ease) both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(32px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+
+    /* ── QUICK LINKS ── */
+    .quicklinks {
+      position: relative; z-index: 1;
+      display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+      padding: 0 32px 80px;
+      animation: fadeUp 0.8s 0.35s var(--ease) both;
+    }
+    .ql-btn {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 600;
+      padding: 10px 20px; border-radius: 10px;
+      border: 1px solid; cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s var(--ease);
+    }
+    .ql-btn:hover { transform: translateY(-3px); filter: brightness(1.2); }
+    .ql-red    { color: var(--neon2); border-color: rgba(220,30,30,0.4); background: rgba(220,30,30,0.1); }
+    .ql-gold   { color: var(--gold);  border-color: rgba(245,158,11,0.4); background: rgba(245,158,11,0.1); }
+    .ql-green  { color: var(--green); border-color: rgba(16,185,129,0.4); background: rgba(16,185,129,0.1); }
+    .ql-purple { color: var(--purple);border-color: rgba(139,92,246,0.4); background: rgba(139,92,246,0.1); }
+    .ql-blue   { color: var(--blue);  border-color: rgba(59,130,246,0.4); background: rgba(59,130,246,0.1); }
+    .ql-orange { color: var(--orange);border-color: rgba(249,115,22,0.4); background: rgba(249,115,22,0.1); }
+
+    /* ── SECTION LAYOUT ── */
+    .main { position: relative; z-index: 1; padding: 0 32px; max-width: 1100px; margin: 0 auto; }
+
+    .section {
+      margin-bottom: 100px;
+      animation: fadeUp 0.7s var(--ease) both;
+      animation-play-state: paused;
+    }
+    .section.visible { animation-play-state: running; }
+
+    .section-header {
+      display: flex; align-items: flex-end; gap: 20px;
+      margin-bottom: 32px; padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      position: relative;
+    }
+    .section-header::after {
+      content:''; position: absolute; bottom:-1px; left:0;
+      width: 80px; height: 1px;
+      background: var(--accent, var(--neon));
+      box-shadow: 0 0 10px var(--accent, var(--neon));
+    }
+
+    .section-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; flex-shrink: 0;
+      background: var(--glass); border: 1px solid var(--glass-border);
+      box-shadow: 0 0 20px var(--accent-glow, var(--glow-soft));
+    }
+    .section-title-wrap { display: flex; flex-direction: column; gap: 4px; }
+    .section-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--accent, var(--neon2));
+      opacity: 0.8;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(28px, 4vw, 42px); line-height: 1;
+      letter-spacing: 1px;
+      color: #fff;
+    }
+    .section-count {
+      margin-left: auto; font-size: 11px; color: rgba(255,255,255,0.25);
+      font-weight: 600; letter-spacing: 1px; padding-bottom: 4px;
+    }
+
+    /* ── RULES GRID ── */
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 14px;
+    }
+
+    .rule-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px; padding: 18px 20px;
+      display: flex; gap: 14px; align-items: flex-start;
+      transition: all 0.25s var(--ease);
+      position: relative; overflow: hidden;
+    }
+    .rule-card::before {
+      content:''; position:absolute; inset:0;
+      background: radial-gradient(circle at top left, var(--accent-glow, var(--glow-soft)), transparent 60%);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .rule-card:hover { border-color: rgba(255,255,255,0.14); transform: translateY(-2px); }
+    .rule-card:hover::before { opacity: 1; }
+
+    .rule-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px; line-height: 1;
+      color: var(--accent, var(--neon2));
+      min-width: 32px; text-align: right;
+      opacity: 0.7; padding-top: 1px;
+    }
+    .rule-body { flex: 1; }
+    .rule-title {
+      font-size: 13px; font-weight: 700;
+      color: rgba(255,255,255,0.9); margin-bottom: 5px;
+    }
+    .rule-desc {
+      font-size: 12px; line-height: 1.65;
+      color: rgba(255,255,255,0.45); font-weight: 400;
+    }
+
+    .rule-severe {
+      border-color: rgba(220,30,30,0.25) !important;
+    }
+    .rule-severe .rule-num { opacity: 1; }
+    .rule-tag {
+      display: inline-flex; align-items: center;
+      font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; padding: 2px 7px; border-radius: 4px;
+      margin-bottom: 5px;
+    }
+    .tag-grave  { background: rgba(220,30,30,0.2); color: #f87171; }
+    .tag-medio  { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .tag-leve   { background: rgba(16,185,129,0.12); color: #34d399; }
+    .tag-info   { background: rgba(59,130,246,0.12); color: #60a5fa; }
+
+    /* ── FOOTER ── */
+    .footer {
+      position: relative; z-index: 1;
+      text-align: center; padding: 60px 32px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.2); font-size: 12px;
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+    }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif; font-size: 22px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.4), var(--neon));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; letter-spacing: 2px;
+    }
+    .footer-line { width: 40px; height: 1px; background: rgba(220,30,30,0.3); }
+
+    /* ── BACK TO TOP ── */
+    #btt {
+      position: fixed; bottom: 28px; right: 28px; z-index: 200;
+      width: 44px; height: 44px; border-radius: 12px;
+      background: rgba(220,30,30,0.2); border: 1px solid rgba(220,30,30,0.35);
+      color: var(--neon2); font-size: 18px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transform: translateY(10px);
+      transition: all 0.3s var(--ease);
+      text-decoration: none;
+    }
+    #btt.show { opacity: 1; transform: translateY(0); }
+    #btt:hover { background: rgba(220,30,30,0.35); box-shadow: 0 0 20px var(--glow); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      .nav-tabs { display: none; }
+      .rules-grid { grid-template-columns: 1fr; }
+      .hero { padding: 120px 20px 60px; }
+      .main { padding: 0 16px; }
+      .quicklinks { padding: 0 16px 60px; }
+      .nav { padding: 0 20px; }
+    }
+
+    /* ── SCROLL BAR ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(220,30,30,0.35); border-radius: 3px; }
+
+    /* Divider between big sections */
+    .section-divider {
+      width: 100%; height: 1px; margin: 0 0 80px;
+      background: linear-gradient(90deg, transparent, rgba(220,30,30,0.2), transparent);
+    }
+  </style>
+</head>
+<body>
+
+<!-- BG -->
+<div class="bg-grid"></div>
+<div class="bg-radial"></div>
+<div class="particles" id="particles"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <span class="nav-logo">ChileCity RP</span>
+    <span class="nav-badge">NORMATIVA</span>
+  </div>
+  <div class="nav-tabs" id="navTabs">
+    <a class="nav-tab active" href="#discord">Discord</a>
+    <a class="nav-tab" href="#roleplay">Roleplay</a>
+    <a class="nav-tab" href="#terminos">Términos RP</a>
+    <a class="nav-tab" href="#facciones">Facciones</a>
+    <a class="nav-tab" href="#staff">Staff</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">📋 Reglamento Oficial</div>
+  <h1 class="hero-title">NORMATIVA<br>CHILECITY</h1>
+  <p class="hero-sub">Lee y respeta las reglas del servidor. La ignorancia de las normas no exime de su cumplimiento. El desconocimiento no es excusa.</p>
+  <div class="hero-line"></div>
+</section>
+
+<!-- QUICK LINKS -->
+<div class="quicklinks">
+  <a class="ql-btn ql-red"    href="#discord">   📣 Discord</a>
+  <a class="ql-btn ql-gold"   href="#roleplay">  🎭 Roleplay</a>
+  <a class="ql-btn ql-green"  href="#terminos">  📖 Términos RP</a>
+  <a class="ql-btn ql-purple" href="#facciones"> ⚔️ Facciones Ilegales</a>
+  <a class="ql-btn ql-orange" href="#staff">     🛡️ Staff</a>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+  <!-- ══════════════════════════════════════════
+       1. NORMATIVA DISCORD
+  ══════════════════════════════════════════ -->
+  <section class="section" id="discord" style="--accent:var(--neon);--accent-glow:var(--glow-soft);">
+    <div class="section-header">
+      <div class="section-icon">📣</div>
+      <div class="section-title-wrap">
+        <span class="section-label">Sección 01</span>
+        <h2 class="section-title">Normativa Discord</h2>
+      </div>
+      <span class="section-count">30 normas</span>
+    </div>
+    <div class="rules-grid">
+
+      <div class="rule-card">
+        <span class="rule-num">01</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Respeto entre miembros</div>
+          <div class="rule-desc">Toda interacción dentro del servidor debe ser respetuosa. Insultos, burlas o actitudes despectivas hacia otros usuarios serán sancionadas de inmediato.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">02</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Idioma oficial</div>
+          <div class="rule-desc">El idioma oficial del servidor es el español. Está prohibido comunicarse en otros idiomas en canales públicos para garantizar la comprensión de todos.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">03</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Sin spam ni flood</div>
+          <div class="rule-desc">Queda prohibido enviar mensajes repetidos, caracteres sin sentido o imágenes masivas en los canales. Esto incluye copiar y pegar el mismo texto múltiples veces.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">04</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Sin publicidad no autorizada</div>
+          <div class="rule-desc">No está permitido publicitar otros servidores, comunidades, redes sociales o servicios sin autorización expresa del staff. La publicidad incluye invitaciones por DM.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">05</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">Contenido NSFW prohibido</div>
+          <div class="rule-desc">Está terminantemente prohibido compartir contenido sexual, violento, gore o perturbador en cualquier canal del servidor, sin excepción.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">06</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">Discriminación cero</div>
+          <div class="rule-desc">Está prohibida cualquier forma de discriminación por raza, género, orientación sexual, religión, nacionalidad o cualquier otra característica personal.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">07</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Usa los canales correctos</div>
+          <div class="rule-desc">Cada canal tiene un propósito específico. Respetar la función de cada canal permite una mejor organización y experiencia para toda la comunidad.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">08</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Nombre de usuario apropiado</div>
+          <div class="rule-desc">El nombre de usuario y avatar deben ser apropiados. Nombres ofensivos, que imiten al staff o usen caracteres especiales invasivos serán modificados por administración.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">09</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Respeto a las decisiones del staff</div>
+          <div class="rule-desc">Las decisiones del equipo de staff son finales en primera instancia. Las apelaciones deben realizarse por los canales habilitados, nunca en público.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">10</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">Prohibido hackeo o exploits</div>
+          <div class="rule-desc">Compartir métodos de hackeo, exploits, modificaciones tramposas o cualquier vulnerabilidad del servidor/juego resultará en baneo permanente e inmediato.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">11</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Sin menciones masivas</div>
+          <div class="rule-desc">Mencionar a @everyone, @here o mencionar repetidamente a usuarios sin motivo válido está prohibido. Solo el staff puede usar menciones masivas.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">12</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Canales de voz con respeto</div>
+          <div class="rule-desc">En los canales de voz se prohíbe el uso de soundboards molestos, ruidos excesivos, música sin consentimiento o comportamientos que interrumpan la conversación.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">13</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Bugs o errores deben reportarse</div>
+          <div class="rule-desc">Si encuentras un error, bug o falla en el servidor, debes reportarlo al staff de inmediato. Aprovechar un bug sin reportarlo se considera explotación y será sancionado.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">14</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">Sin acoso ni hostigamiento</div>
+          <div class="rule-desc">El acoso, hostigamiento, amenazas o persecución de usuarios dentro o fuera del servidor (a través de DMs) usando el servidor como contexto está completamente prohibido.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">15</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Las apelaciones van por ticket</div>
+          <div class="rule-desc">Toda apelación a sanciones debe realizarse mediante el sistema de tickets. Quejarse públicamente de una sanción en canales generales generará penalización adicional.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">16</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">Sin doxxing ni datos personales</div>
+          <div class="rule-desc">Publicar datos personales reales de otros usuarios (dirección, teléfono, fotos privadas, redes sociales sin consentimiento) resulta en baneo permanente.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">17</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Cuentas alternas</div>
+          <div class="rule-desc">El uso de cuentas alternas para evadir sanciones, multas o banes está prohibido. Ambas cuentas serán baneadas si se detecta esta conducta.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">18</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Mantén el OOC fuera del juego</div>
+          <div class="rule-desc">Los conflictos fuera del personaje (OOC) no deben trasladarse al servidor de Discord. Las disputas de juego no son motivo de peleas en el chat general.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">19</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Canales de anuncios son de solo lectura</div>
+          <div class="rule-desc">Los canales de anuncios existen exclusivamente para publicaciones del staff. No está permitido responder, reaccionar masivamente ni comentar en ellos.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">20</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">No impersonar al staff</div>
+          <div class="rule-desc">Hacerse pasar por un miembro del equipo de staff, utilizar nombres similares o insinuar tener poderes de administración es una falta grave.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">21</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Debates con respeto</div>
+          <div class="rule-desc">Los debates en canales habilitados para ello deben mantenerse en tono respetuoso. Insultar a quien piensa diferente conlleva advertencia o silencio.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">22</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">No compartir capturas fuera de contexto</div>
+          <div class="rule-desc">Publicar capturas de pantalla de conversaciones privadas o de juego editadas o sin contexto para difamar a usuarios está prohibido.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">23</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">Contenido ilegal prohibido</div>
+          <div class="rule-desc">Está estrictamente prohibido compartir contenido ilegal de cualquier tipo, incluyendo software pirata, métodos para delinquir o material protegido sin licencia.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">24</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Respeto en los tickets</div>
+          <div class="rule-desc">Al abrir un ticket debes ser claro, respetuoso y proporcionar la información necesaria. El mal uso de tickets para insultar al staff tiene consecuencias.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">25</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">No pedir roles o rangos</div>
+          <div class="rule-desc">Pedir roles, cargos dentro del servidor o mencionar repetidamente que deseas ser staff está prohibido. El staff es seleccionado por el equipo directivo.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">26</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Sin dramatismo exagerado</div>
+          <div class="rule-desc">Publicar mensajes de "me voy del servidor", "nadie me quiere" u otros dramas en canales públicos para llamar la atención será sancionado.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">27</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">INFO</div>
+          <div class="rule-title">Mantente al día con los anuncios</div>
+          <div class="rule-desc">Es responsabilidad de cada miembro leer los anuncios del servidor. Alegar desconocimiento de una norma o cambio publicado no es una excusa válida.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">28</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Evita spoilers sin aviso</div>
+          <div class="rule-desc">Si compartes contenido que pueda ser un spoiler de eventos del servidor, debes usar el formato de spoiler de Discord (||texto||) o publicarlo en el canal correspondiente.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num">29</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Bots solo en canales habilitados</div>
+          <div class="rule-desc">El uso de comandos de bots está restringido a los canales específicos para ello. Usar comandos de bots en canales generales será sancionado.</div>
+        </div>
+      </div>
+
+      <div class="rule-card rule-severe">
+        <span class="rule-num">30</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">Incumplimiento reiterado = baneo</div>
+          <div class="rule-desc">El incumplimiento reiterado de las normas, independientemente de su gravedad individual, puede resultar en un baneo permanente del servidor sin posibilidad de apelación.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ══════════════════════════════════════════
+       2. NORMATIVA ROLEPLAY
+  ══════════════════════════════════════════ -->
+  <section class="section" id="roleplay" style="--accent:var(--gold);--accent-glow:rgba(245,158,11,0.15);">
+    <div class="section-header">
+      <div class="section-icon">🎭</div>
+      <div class="section-title-wrap">
+        <span class="section-label">Sección 02</span>
+        <h2 class="section-title">Normativa Roleplay</h2>
+      </div>
+      <span class="section-count">30 normas</span>
+    </div>
+    <div class="rules-grid">
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">01</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">FUNDAMENTAL</div>
+          <div class="rule-title">Roleplay siempre en primer lugar</div>
+          <div class="rule-desc">El roleplay está por encima de cualquier interés personal o económico. El servidor es un espacio de rol inmersivo y toda acción debe tener coherencia narrativa.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">02</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">Prohibido el RDM (Random Deathmatch)</div>
+          <div class="rule-desc">Matar a otro jugador sin motivo de rol previo y justificado está terminantemente prohibido. Toda situación de violencia debe tener un contexto narrativo real.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">03</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">Prohibido el VDM (Vehicle Deathmatch)</div>
+          <div class="rule-desc">Atropellar intencionalmente a jugadores con vehículos sin contexto de rol es una infracción grave. Los vehículos son herramientas de transporte, no armas directas.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">04</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">No Metagaming</div>
+          <div class="rule-desc">Usar información obtenida fuera del juego (Discord, streams, amigos OOC) para beneficiar a tu personaje dentro del RP está completamente prohibido.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">05</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">No Powergaming</div>
+          <div class="rule-desc">Realizar acciones imposibles o irrealistas para tu personaje, forzar acciones sobre otros jugadores o ignorar los límites físicos del rol no está permitido.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">06</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Valor de vida (VDL)</div>
+          <div class="rule-desc">Tu personaje debe valorar su vida en todo momento. No puedes actuar de forma suicida o imprudente sin consecuencias. Ante amenaza real de muerte, debes acatar.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">07</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Regla de nuevas vidas (CK parcial)</div>
+          <div class="rule-desc">Al ser declarado inconsciente (KOS), tu personaje pierde memoria del evento que causó su estado. No puedes recordar quién te atacó ni buscar venganza inmediata.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">08</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Mantén el personaje (IC)</div>
+          <div class="rule-desc">Una vez dentro del servidor y en zona activa, debes mantenerte en el personaje. Hablar OOC en el juego rompe la inmersión y molesta a la comunidad.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">09</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">No combat logging</div>
+          <div class="rule-desc">Desconectarse del servidor durante una situación de combate, persecución, arresto o cualquier interacción activa de rol para evitar consecuencias está prohibido.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">10</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Roleplay de cortesía</div>
+          <div class="rule-desc">Cuando un jugador solicite detener el RP por causa de fuerza mayor (emergencia real, desconexión técnica), debes ser comprensivo. El juego se reanuda con acuerdo mutuo.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">11</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Los personajes deben ser realistas</div>
+          <div class="rule-desc">Tu personaje debe tener una historia coherente con el entorno. Personajes sin sentido, de fantasía u otro universo de ficción no están permitidos.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">12</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Zona verde = sin conflicto</div>
+          <div class="rule-desc">Los hospitales y otras zonas verdes designadas son áreas de paz. Está prohibido iniciar peleas, robos o detenciones dentro de estas zonas protegidas.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">13</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Límite de rehenes en secuestros</div>
+          <div class="rule-desc">En situaciones de rehenes se permite un máximo de 2 rehenes por grupo. Los rehenes deben ser tratados dentro de los parámetros del roleplay serio.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">14</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">No bugear ni explotar el mapa</div>
+          <div class="rule-desc">Atravesar paredes, entrar a zonas inaccesibles mediante fallos del motor gráfico o usar glitches para ventaja táctica en el RP es una falta muy grave.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">15</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Roleplay de la física</div>
+          <div class="rule-desc">El juego tiene física imperfecta. En caso de accidente de tráfico o caída, debes rolplear las consecuencias de forma realista, no ignorarlas porque el juego lo permita.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">16</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">No stream sniping</div>
+          <div class="rule-desc">Usar la transmisión en vivo de otro jugador para conocer su ubicación o situación y usarlo en tu beneficio dentro del juego es metagaming y no está permitido.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">17</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Vestuario coherente con el personaje</div>
+          <div class="rule-desc">La apariencia de tu personaje debe ser coherente con su historia y rol. Ropa extravagante sin sentido narrativo o que imite uniformes oficiales sin serlo está prohibida.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">18</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Roleplay sexual con mayores de edad</div>
+          <div class="rule-desc">El roleplay de contenido adulto solo está permitido entre personajes explícitamente mayores de edad y en espacios privados, con consentimiento de ambas partes.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">19</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">No griefing</div>
+          <div class="rule-desc">Destruir, robar o sabotear la experiencia de otros jugadores sin contexto de rol, especialmente de manera repetida y dirigida, es griefing y está prohibido.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">20</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Documentación de evidencia</div>
+          <div class="rule-desc">Si eres víctima de una infracción, es tu responsabilidad documentar la evidencia (grabación, capturas). Sin evidencia, la investigación del staff puede limitarse.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">21</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Roleplay policial real</div>
+          <div class="rule-desc">Los jugadores que ejerzan rol policial deben seguir protocolos realistas. No se permite actuar de forma corrupta extrema sin respaldo narrativo aprobado por staff.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">22</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">El dinero tiene rol</div>
+          <div class="rule-desc">Toda transacción económica debe tener sentido dentro del rol del personaje. No se puede acumular riqueza sin justificación narrativa coherente.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">23</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Sin multiples personajes activos</div>
+          <div class="rule-desc">Tener múltiples personajes activos en facciones distintas para beneficio propio o compartir información entre ellos está prohibido. Cada personaje tiene su mundo.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">24</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Roleplay de heridas</div>
+          <div class="rule-desc">Después de recibir daño significativo, tu personaje debe rolplear el estado herido de forma coherente. Ignorar por completo las heridas rompe la inmersión.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">25</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">No usar hacks o cheats</div>
+          <div class="rule-desc">El uso de cualquier modificación no autorizada, cheat o hack en el cliente del juego resulta en baneo permanente sin posibilidad de apelación.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">26</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Consistencia en el personaje</div>
+          <div class="rule-desc">Tu personaje debe mantener rasgos coherentes. Cambios drásticos de personalidad sin justificación narrativa (trauma, evolución de historia) no están permitidos.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">27</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Rol de menores</div>
+          <div class="rule-desc">El roleplay de personajes menores de edad está permitido solo en contextos familiares y sin ningún tinte de violencia extrema o contenido adulto.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">28</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">INFO</div>
+          <div class="rule-title">Safe word: "PAUSE"</div>
+          <div class="rule-desc">Si un jugador escribe "PAUSE" en el chat, toda la situación de RP se congela temporalmente. Es para resolver problemas técnicos o aclarar malentendidos graves.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--gold)">29</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Eventos especiales tienen reglas propias</div>
+          <div class="rule-desc">Durante eventos organizados por el staff pueden aplicarse reglas adicionales o exceptuarse algunas normas generales. Siempre leer el briefing del evento antes de participar.</div>
+        </div>
+      </div>
+
+      <div class="rule-card rule-severe">
+        <span class="rule-num" style="color:var(--gold)">30</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">El staff tiene la última palabra</div>
+          <div class="rule-desc">En situaciones de ambigüedad normativa dentro del juego, la decisión del staff presente es definitiva y debe acatarse en el momento. Las apelaciones van por ticket.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ══════════════════════════════════════════
+       3. TÉRMINOS RP
+  ══════════════════════════════════════════ -->
+  <section class="section" id="terminos" style="--accent:var(--green);--accent-glow:rgba(16,185,129,0.12);">
+    <div class="section-header">
+      <div class="section-icon">📖</div>
+      <div class="section-title-wrap">
+        <span class="section-label">Sección 03</span>
+        <h2 class="section-title">Términos RP</h2>
+      </div>
+      <span class="section-count">28 términos</span>
+    </div>
+    <div class="rules-grid">
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">01</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">IC — In Character</div>
+          <div class="rule-desc">Todo lo que ocurre dentro del juego desde la perspectiva del personaje. Las acciones, diálogos y decisiones IC pertenecen al mundo ficticio del roleplay.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">02</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">OOC — Out Of Character</div>
+          <div class="rule-desc">Todo lo que ocurre fuera del personaje, en el mundo real. Conversaciones OOC deben mantenerse fuera del juego o marcarse claramente con doble paréntesis (( )).</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">03</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">RDM — Random Deathmatch</div>
+          <div class="rule-desc">Matar a otro jugador sin justificación narrativa previa. Es una de las infracciones más graves en cualquier servidor de roleplay serio.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">04</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">VDM — Vehicle Deathmatch</div>
+          <div class="rule-desc">Usar un vehículo como arma para atropellar intencionalmente a jugadores sin contexto de rol. Similar al RDM pero utilizando vehículos como medio.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">05</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">Metagaming</div>
+          <div class="rule-desc">Uso de información real (OOC) para beneficiar al personaje (IC). Ejemplo: saber la ubicación de alguien porque lo viste en un stream y usarlo en el juego.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">06</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">Powergaming</div>
+          <div class="rule-desc">Realizar acciones imposibles, forzar emociones sobre otros personajes o ignorar los límites físicos del rol para obtener ventaja injusta sobre otros jugadores.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">07</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">CK — Character Kill</div>
+          <div class="rule-desc">Muerte permanente del personaje. El CK significa que el personaje muere definitivamente dentro de la narrativa, su historia termina y debes crear uno nuevo.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">08</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">NLR — New Life Rule</div>
+          <div class="rule-desc">Regla de nueva vida. Cuando tu personaje muere o queda inconsciente, pierdes la memoria de ese evento. No puedes recordar a tu atacante ni volver al lugar inmediatamente.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">09</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">VDL — Valor de Vida</div>
+          <div class="rule-desc">Principio que obliga a valorar la vida del personaje. Ante una amenaza creíble con arma apuntada, tu personaje debe actuar con miedo real, no de forma heroica ilógica.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">10</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">KOS — Kill On Sight</div>
+          <div class="rule-desc">Orden de matar en cuanto se vea a un jugador. Para declarar KOS a alguien debe existir justificación narrativa sólida y, en ciertos casos, aprobación del staff.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">11</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">AFK — Away From Keyboard</div>
+          <div class="rule-desc">Estar ausente del teclado. Estar AFK en zonas de juego activo puede generar consecuencias IC. Hay áreas y mecanismos habilitados para la espera sin sanciones.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">12</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">RP — Roleplay</div>
+          <div class="rule-desc">Interpretación de un personaje de ficción en un entorno de juego compartido, siguiendo reglas narrativas para construir historias colectivas coherentes.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">13</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">Backstory</div>
+          <div class="rule-desc">Historia de origen del personaje. Define quién es, de dónde viene y por qué hace lo que hace. Una buena backstory enriquece el RP y da coherencia a las acciones IC.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">14</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">EMS — Emergency Medical Services</div>
+          <div class="rule-desc">Servicios de emergencias médicas. Los jugadores con rol EMS atienden heridos en campo. Siempre debes esperar atención antes de respawnear en zonas no críticas.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">15</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">LEO — Law Enforcement Officer</div>
+          <div class="rule-desc">Oficial de la ley o policía. Los jugadores con rol LEO aplican las leyes del servidor de forma IC. Su autoridad dentro del juego debe respetarse como parte del RP.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">16</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">Facción</div>
+          <div class="rule-desc">Grupo organizado de personajes con objetivos y jerarquía común. Las facciones pueden ser legales (policía, gobierno) o ilegales (pandillas, carteles) dentro del RP.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">17</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">Zona Verde</div>
+          <div class="rule-desc">Área neutral y segura donde los conflictos IC están prohibidos. Generalmente hospitales, comisarías y zonas de inicio de personaje. Respetar estas zonas es obligatorio.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">18</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">Zona Roja</div>
+          <div class="rule-desc">Área de conflicto activo donde las interacciones violentas están permitidas dentro del contexto de rol. Siempre debe existir justificación narrativa para el conflicto.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">19</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">Cop Bait</div>
+          <div class="rule-desc">Provocar deliberadamente a la policía para iniciar persecuciones o interacciones sin motivo de rol real. Esta práctica está prohibida y puede resultar en sanción.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">20</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">Fail RP</div>
+          <div class="rule-desc">Cualquier acción que rompe la inmersión del rol o que resulta incoherente con el entorno realista del servidor. Ejemplo: correr desnudo por la autopista sin contexto.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">21</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">Mugging / Assalto</div>
+          <div class="rule-desc">Robo en la vía pública a otro jugador. Debe haber contexto de rol, amenaza verbal y tiempo suficiente para que la víctima reaccione. No puede ser instantáneo.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">22</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">Heist</div>
+          <div class="rule-desc">Robo organizado a bancos, negocios u objetivos de alto valor. Los heists requieren planificación IC, número mínimo de participantes y seguir reglas específicas del servidor.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">23</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">Chop Shop</div>
+          <div class="rule-desc">Negocio ilegal de desmantelamiento de vehículos robados para vender sus piezas. Actividad IC que requiere estar en una facción ilegal y seguir reglas de zona.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">24</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">Hitman / Contrato</div>
+          <div class="rule-desc">Servicio de asesinato pagado entre personajes. Requiere transacción IC verificable, justificación narrativa y no puede usarse para acoso sistemático a un jugador.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">25</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">Raid</div>
+          <div class="rule-desc">Ataque organizado al territorio o sede de otra facción. Los raids deben estar precedidos por hostilidades IC establecidas y seguir reglas específicas del servidor.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">26</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">Dealear / Trapear</div>
+          <div class="rule-desc">Venta de sustancias ilegales dentro del juego. Actividad IC reservada para miembros de facciones ilegales en zonas no seguras, con riesgo de intervención policial.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">27</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">Respawn / Revivir</div>
+          <div class="rule-desc">Volver al juego tras quedar inconsciente. Siempre que sea posible, debes esperar a un EMS. El respawn inmediato implica pérdida de memoria del evento (NLR).</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--green)">28</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">GLOSARIO</div>
+          <div class="rule-title">Admin / Staff Sit</div>
+          <div class="rule-desc">Reunión entre jugadores y el staff para resolver situaciones de infracción o malentendidos. Durante una admin sit el tiempo del rol se congela para todos los involucrados.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ══════════════════════════════════════════
+       4. NORMATIVA FACCIONES ILEGALES
+  ══════════════════════════════════════════ -->
+  <section class="section" id="facciones" style="--accent:var(--purple);--accent-glow:rgba(139,92,246,0.12);">
+    <div class="section-header">
+      <div class="section-icon">⚔️</div>
+      <div class="section-title-wrap">
+        <span class="section-label">Sección 04</span>
+        <h2 class="section-title">Facciones Ilegales</h2>
+      </div>
+      <span class="section-count">30 normas</span>
+    </div>
+    <div class="rules-grid">
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">01</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">REQUISITO</div>
+          <div class="rule-title">Aprobación para crear una facción</div>
+          <div class="rule-desc">Para fundar una facción ilegal se debe presentar un formulario al staff con backstory, nombre, objetivos y jerarquía propuesta. Sin aprobación la facción no existe IC.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">02</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">REQUISITO</div>
+          <div class="rule-title">Mínimo de miembros activos</div>
+          <div class="rule-desc">Una facción ilegal debe mantener un mínimo de 5 miembros activos. Si cae por debajo de ese número durante más de 2 semanas, la facción será disuelta por staff.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">03</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Territorio marcado</div>
+          <div class="rule-desc">Cada facción ilegal puede reclamar zonas de territorio IC. Esto debe hacerse mediante roleplay de control de zona, no simplemente declarándolo en Discord.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">04</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">No masacres indiscriminadas</div>
+          <div class="rule-desc">Matar a civiles sin rol ilegal o a jugadores sin afiliación rival sin justificación es inaceptable. Las facciones tienen enemigos IC específicos, no a toda la ciudad.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">05</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Las guerras deben declararse</div>
+          <div class="rule-desc">Antes de iniciar hostilidades abiertas entre facciones debe existir una declaración IC y, cuando corresponda, notificación al staff para seguimiento del conflicto.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">06</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Jerarquía interna definida</div>
+          <div class="rule-desc">Toda facción debe tener una cadena de mando clara documentada. Cada miembro debe conocer su rango y respetar las decisiones del liderazgo IC.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">07</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Límite de miembros por operación</div>
+          <div class="rule-desc">En operaciones activas (robos, guerras, raids) el número máximo de miembros de una facción participando simultáneamente no puede superar 8 personas sin autorización especial.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">08</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">No atacar zonas verdes</div>
+          <div class="rule-desc">Atacar hospitales, comisarías o cualquier zona verde para matar a rivales está absolutamente prohibido. La neutralidad de estas zonas debe respetarse siempre.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">09</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Rol de reclutamiento</div>
+          <div class="rule-desc">El reclutamiento de nuevos miembros debe hacerse completamente IC. No se puede reclutar directamente por Discord OOC ni presionar a jugadores a unirse a una facción.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">10</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Actividad económica ilegal coherente</div>
+          <div class="rule-desc">Las actividades económicas de la facción (drogas, armas, extorsión) deben ser coherentes con su backstory y zona de influencia. No se puede hacer todo al mismo tiempo.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">11</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Rendición en combate</div>
+          <div class="rule-desc">Si tu facción es superada en un enfrentamiento y hay un claro vencedor, rendirse IC es una opción válida y muchas veces la más realista. El VDL aplica también en guerras.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">12</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">No corrupción fuera de protocolo</div>
+          <div class="rule-desc">Sobornar a policías o funcionarios IC solo puede ocurrir dentro del marco de RP establecido. Contactar OOC a jugadores del staff policial para "comprar" favores está prohibido.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">13</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Lealtad y traición tienen consecuencias IC</div>
+          <div class="rule-desc">La traición dentro de una facción debe tener consecuencias IC reales y proporcionales. Las facciones pueden aplicar su propia justicia interna dentro del RP.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">14</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Alianzas deben registrarse</div>
+          <div class="rule-desc">Las alianzas formales entre facciones deben notificarse al staff. Alianzas no declaradas que impacten conflictos activos pueden invalidar sus acciones IC.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">15</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">Prohibido el abuso de poder</div>
+          <div class="rule-desc">Usar la facción como excusa para hostigar de forma sistemática a un jugador concreto, independiente del contexto IC, es acoso y será sancionado duramente.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">16</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Vestimenta y colores de facción</div>
+          <div class="rule-desc">Cada facción debe tener una identidad visual coherente. Usar los colores o ropa de otra facción sin permiso IC se considerará provocación y tendrá consecuencias.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">17</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Cautiverio y secuestros tienen límites</div>
+          <div class="rule-desc">Retener a un jugador en cautiverio IC no puede exceder los 30 minutos sin justificación narrativa activa. El cautiverio no puede usarse para griefing.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">18</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Actividad mínima semanal</div>
+          <div class="rule-desc">Las facciones deben demostrar actividad IC mínima semanal. Facciones inactivas por más de 2 semanas pueden perder su estatus oficial y ser disueltas por staff.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">19</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">No caza de policías fuera de contexto</div>
+          <div class="rule-desc">Buscar activamente matar policías sin conflicto IC previo (cop hunting) está prohibido. La policía puede ser objetivo en contexto de respuesta a crímenes activos.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">20</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">Sin modificaciones al servidor</div>
+          <div class="rule-desc">Las facciones no pueden modificar el entorno del servidor (texturas, scripts, objetos) sin autorización expresa del equipo técnico del staff.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">21</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Rol de negocio ilegal</div>
+          <div class="rule-desc">Operar negocios de fachada para actividades ilegales requiere tener el establecimiento registrado IC y construir el rol de manera gradual y coherente.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">22</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Escala de violencia proporcional</div>
+          <div class="rule-desc">La respuesta violenta de una facción debe ser proporcional a la provocación IC recibida. Escaladas extremas sin justificación narrativa serán revisadas por staff.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">23</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">El líder responde por la facción</div>
+          <div class="rule-desc">El líder de una facción es responsable IC y parcialmente OOC del comportamiento de sus miembros. Las infracciones repetidas de una facción afectan al liderazgo.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">24</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Reglas de tregua</div>
+          <div class="rule-desc">Una tregua IC acordada entre facciones debe respetarse durante el tiempo pactado. Romper una tregua antes de tiempo puede tener consecuencias gestionadas por staff.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">25</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">No filtrar información interna</div>
+          <div class="rule-desc">Filtrar información interna de tu facción a rivales OOC (Discord, mensajes directos) para obtener ventaja personal es metagaming y traición simultáneos.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">26</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Disolución voluntaria</div>
+          <div class="rule-desc">Si una facción desea disolverse, debe comunicarlo al staff con antelación. La disolución debe tener cierre narrativo IC, no simplemente desaparecer sin explicación.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">27</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Armas de facción son responsabilidad IC</div>
+          <div class="rule-desc">Las armas gestionadas por la facción son responsabilidad directa del grupo. Perder armamento IC ante la policía tiene consecuencias permanentes para la facción.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">28</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Historia de facción documentada</div>
+          <div class="rule-desc">El staff puede solicitar en cualquier momento la historia actualizada de la facción. Tener una narrativa interna activa es parte de los requisitos para mantener el estatus oficial.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--purple)">29</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Límite de facciones por jugador</div>
+          <div class="rule-desc">Un jugador no puede tener personajes activos en más de una facción ilegal simultáneamente, independientemente de los personajes que tenga creados.</div>
+        </div>
+      </div>
+
+      <div class="rule-card rule-severe">
+        <span class="rule-num" style="color:var(--purple)">30</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">Violación grave = disolución de facción</div>
+          <div class="rule-desc">Infracciones extremas cometidas en nombre de una facción pueden resultar en la disolución forzada de esta por parte del staff, además de las sanciones individuales correspondientes.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ══════════════════════════════════════════
+       5. NORMATIVA STAFF
+  ══════════════════════════════════════════ -->
+  <section class="section" id="staff" style="--accent:var(--orange);--accent-glow:rgba(249,115,22,0.12);">
+    <div class="section-header">
+      <div class="section-icon">🛡️</div>
+      <div class="section-title-wrap">
+        <span class="section-label">Sección 05</span>
+        <h2 class="section-title">Normativa Staff</h2>
+      </div>
+      <span class="section-count">28 normas</span>
+    </div>
+    <div class="rules-grid">
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">01</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">ÉTICA</div>
+          <div class="rule-title">Imparcialidad ante todo</div>
+          <div class="rule-desc">Todo miembro del staff debe actuar con imparcialidad absoluta. Las amistades personales con jugadores no pueden influir en las decisiones administrativas.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">02</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">Abuso de permisos = expulsión</div>
+          <div class="rule-desc">Usar los poderes de staff para beneficio personal IC (darse dinero, items, ventajas, información) es abuso de poder y resulta en expulsión inmediata del equipo.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">03</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">ÉTICA</div>
+          <div class="rule-title">Confidencialidad del equipo</div>
+          <div class="rule-desc">Las conversaciones internas del staff son confidenciales. Filtrar decisiones, debates o información del equipo a jugadores externos está prohibido.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">04</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Actividad mínima semanal</div>
+          <div class="rule-desc">Todo miembro del staff debe mantener actividad mínima semanal tanto en Discord como en el servidor. La inactividad prolongada sin justificación conlleva remoción del cargo.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">05</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Documentar todas las sanciones</div>
+          <div class="rule-desc">Cada sanción aplicada debe registrarse en el sistema con motivo, evidencia y fecha. Sanciones sin documentación pueden ser apeladas exitosamente por el jugador.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">06</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Trato respetuoso siempre</div>
+          <div class="rule-desc">El staff debe mantener un trato respetuoso con todos los jugadores en todo momento, incluso ante comportamientos hostiles. La profesionalidad es obligatoria.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">07</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">No tomar casos propios</div>
+          <div class="rule-desc">Si estás involucrado IC en una situación (como víctima o agresor), no puedes gestionar el ticket o reporte derivado de ella. Debes pasar el caso a otro miembro del staff.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">08</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Escalar casos complejos</div>
+          <div class="rule-desc">Los casos que involucren múltiples jugadores, facciones enteras o situaciones de ambigüedad normativa deben escalarse a un rango superior antes de resolver.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">09</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Separación IC y OOC total</div>
+          <div class="rule-desc">El staff debe mantener separación estricta entre su rol IC (si tiene personaje) y su rol como administrador. Las decisiones OOC nunca pueden filtrarse al IC.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">10</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">ÉTICA</div>
+          <div class="rule-title">Las sanciones deben ser proporcionales</div>
+          <div class="rule-desc">La sanción aplicada debe ser proporcional a la infracción y al historial del jugador. Sanciones excesivas o insuficientes pueden ser revisadas por la dirección.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">11</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Responder tickets en tiempo razonable</div>
+          <div class="rule-desc">Los tickets abiertos deben ser atendidos en un plazo máximo de 24 horas. Los tickets urgentes (situaciones activas en juego) deben priorizarse de forma inmediata.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">12</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">No hacer promesas fuera de competencia</div>
+          <div class="rule-desc">El staff no debe prometer cosas que no están dentro de sus competencias o que no han sido aprobadas por la dirección, para no generar expectativas incumplibles.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">13</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">Prohibido el nepotismo</div>
+          <div class="rule-desc">Favorecer a amigos, personas de la misma facción o jugadores afines en decisiones administrativas, sanciones o eventos es nepotismo y se sanciona con remoción del cargo.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">14</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Conocer el reglamento completo</div>
+          <div class="rule-desc">Todo miembro del staff debe conocer el reglamento del servidor en su totalidad. La ignorancia normativa en un administrador no es excusable bajo ningún concepto.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">15</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Consultar antes de innovar</div>
+          <div class="rule-desc">Antes de implementar cambios normativos, nuevas reglas o decisiones que afecten a múltiples jugadores, se debe consultar y obtener aprobación del equipo directivo.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">16</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Representación fuera del servidor</div>
+          <div class="rule-desc">Como miembro del staff eres representante de ChileCity RP también fuera del servidor. Un comportamiento inapropiado en otras comunidades puede afectar tu cargo.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">17</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Periodo de prueba para nuevos staff</div>
+          <div class="rule-desc">Todo nuevo miembro del staff tiene un período de prueba de 2 semanas donde será evaluado en rendimiento, imparcialidad y conocimiento. La continuidad no es automática.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">18</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">No revelar IPs ni datos de usuarios</div>
+          <div class="rule-desc">El acceso a datos de usuarios (IPs, nombres reales, otras cuentas) es estrictamente confidencial. Revelar esta información es una infracción grave con consecuencias legales.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">19</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Asistir a reuniones de staff</div>
+          <div class="rule-desc">Las reuniones periódicas del equipo son obligatorias. La ausencia reiterada sin justificación puede afectar la permanencia en el equipo de administración.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">20</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">ÉTICA</div>
+          <div class="rule-title">Feedback constructivo</div>
+          <div class="rule-desc">El staff debe proporcionar feedback claro y constructivo a los jugadores sancionados para que entiendan qué hicieron mal y cómo pueden mejorar su experiencia.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">21</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Gestión de apelaciones justa</div>
+          <div class="rule-desc">Las apelaciones deben ser revisadas por un miembro distinto al que aplicó la sanción original. El proceso debe ser transparente y documentado.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">22</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Renuncia con preaviso</div>
+          <div class="rule-desc">Si un miembro del staff decide renunciar, debe comunicarlo con al menos 72 horas de antelación para facilitar la transición y el traspaso de casos abiertos.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">23</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">No compartir accesos</div>
+          <div class="rule-desc">Las credenciales de acceso a paneles de administración, bots o herramientas del staff son personales e intransferibles. Compartirlas es una falta de seguridad grave.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">24</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">Actualizarse con los cambios</div>
+          <div class="rule-desc">Cada vez que el reglamento sea actualizado, el staff debe leer y confirmar los cambios antes de seguir gestionando casos. Aplicar normas desactualizadas es sancionable.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">25</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-medio">MODERADO</div>
+          <div class="rule-title">Supervisión de eventos</div>
+          <div class="rule-desc">Los eventos del servidor requieren presencia mínima de un miembro del staff durante toda su duración para resolver incidencias y garantizar el fair play.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">26</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-info">ÉTICA</div>
+          <div class="rule-title">Honestidad con la dirección</div>
+          <div class="rule-desc">Si cometiste un error en la gestión de un caso, repórtalo a la dirección de inmediato. Ocultar errores propios es más grave que el error en sí mismo.</div>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <span class="rule-num" style="color:var(--orange)">27</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-leve">BÁSICO</div>
+          <div class="rule-title">No postularse uno mismo</div>
+          <div class="rule-desc">Pedir o presionar activamente para obtener un ascenso dentro del staff es contraproducente. Los ascensos se otorgan por mérito evaluado por la dirección.</div>
+        </div>
+      </div>
+
+      <div class="rule-card rule-severe">
+        <span class="rule-num" style="color:var(--orange)">28</span>
+        <div class="rule-body">
+          <div class="rule-tag tag-grave">GRAVE</div>
+          <div class="rule-title">El cargo es un servicio, no un privilegio</div>
+          <div class="rule-desc">Ser staff es un servicio a la comunidad, no un estatus de superioridad. Quien use el cargo para sentirse superior o ejercer autoridad innecesaria perderá el puesto.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-logo">ChileCity RP</div>
+  <div class="footer-line"></div>
+  <p>Normativa oficial del servidor · Todos los derechos reservados</p>
+  <p>La ignorancia de las normas no exime de su cumplimiento</p>
+</footer>
+
+<!-- BACK TO TOP -->
+<a href="#" id="btt" aria-label="Volver arriba">↑</a>
+
+<script>
+  // Particles
+  (function() {
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 30; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.setProperty('--dur', (6 + Math.random() * 10) + 's');
+      p.style.setProperty('--delay', (-Math.random() * 12) + 's');
+      p.style.width = p.style.height = (1 + Math.random() * 2) + 'px';
+      container.appendChild(p);
+    }
+  })();
+
+  // Back to top
+  const btt = document.getElementById('btt');
+  window.addEventListener('scroll', () => {
+    btt.classList.toggle('show', window.scrollY > 400);
+  });
+
+  // Scroll-triggered animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.05 });
+  document.querySelectorAll('.section').forEach(s => observer.observe(s));
+
+  // Active nav tab on scroll
+  const sections = ['discord','roleplay','terminos','facciones','staff'];
+  const tabs = document.querySelectorAll('.nav-tab');
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY + 100;
+    let active = sections[0];
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.offsetTop <= scrollY) active = id;
+    });
+    tabs.forEach(tab => {
+      tab.classList.toggle('active', tab.getAttribute('href') === '#' + active);
+    });
+  });
+</script>
+</body>
+</html>
